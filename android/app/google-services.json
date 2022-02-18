@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1035250211649",
+    "project_id": "predprof-68d0e",
+    "storage_bucket": "predprof-68d0e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035250211649:android:01298023ad703a6c3f1fc0",
+        "android_client_info": {
+          "package_name": "com.example.predprof"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1035250211649-56pp7clp7t99i8cfh0i3998tjleg7ipb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdxrL4eZ4CcyJzH1ayPGFdXMY3LYCRq84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1035250211649-56pp7clp7t99i8cfh0i3998tjleg7ipb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

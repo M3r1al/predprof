@@ -1,25 +1,28 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:predprof/pages/home.dart';
+import 'package:predprof/pages/money.dart';
+import 'package:predprof/pages/auth.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context){
-    return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.amberAccent),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('my App'),
-          centerTitle: true,
-        ),
-        body: Center(
-          child: Text('my App', style: TextStyle(
-              fontSize:  20,
-              color: Colors.red,
-              fontFamily: 'Times New Roman'
-          ),),
-        ),
-      ),
-    );
-  }
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyDdxrL4eZ4CcyJzH1ayPGFdXMY3LYCRq84",
+      appId: "1:1035250211649:android:01298023ad703a6c3f1fc0",
+      messagingSenderId: "1035250211649",
+      projectId: "predprof-68d0e",
+    ),
+  );
+  runApp(MaterialApp(
+    theme: ThemeData(
+      primaryColor: Colors.deepOrangeAccent,
+    ),
+    initialRoute: '/',
+    routes: {
+      '/': (context) => Home(),
+      '/money': (context) => Money(),
+      '/auth': (context) => Auth(),
+    },
+  ));
 }
