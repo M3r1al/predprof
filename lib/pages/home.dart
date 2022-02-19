@@ -19,6 +19,7 @@ class _HomeState extends State<Home> {
 
   void initState(){
     super.initState();
+    //loadName();
 
     // initFirebase();
   }
@@ -50,13 +51,13 @@ class _HomeState extends State<Home> {
           Column(
             children: [
               ElevatedButton(onPressed: () {
-                Navigator.pushNamed(context, '/money');
+                Navigator.pushNamed(context, '/money', arguments: _name);
               }, child: Text('Добавление доходов\nи расходов', textScaleFactor: pow, textAlign: TextAlign.center,)),
               ElevatedButton(onPressed: () {
-                Navigator.pushNamed(context, '/graph');
+                Navigator.pushNamed(context, '/graph', arguments: _name);
               }, child: Text('Просмотреть график\nс прогнозом', textScaleFactor: pow, textAlign: TextAlign.center,),),
               ElevatedButton(onPressed: () {
-                Navigator.pushNamed(context, '/auth');
+                Navigator.pushNamed(context, '/auth', arguments: _name);
               }, child: Text('Просмотреть диаграмму\nрасходов', textScaleFactor: pow, textAlign: TextAlign.center,),),
               ElevatedButton(onPressed: () {
                 //export

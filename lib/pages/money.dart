@@ -2,6 +2,7 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Money extends StatefulWidget{
@@ -41,6 +42,9 @@ class _MoneyState extends State<Money> {
 
   @override
   Widget build(BuildContext context){
+    final arguments = ModalRoute.of(context)!.settings.arguments as String;
+    String _name = arguments;
+
     return Scaffold(
       backgroundColor: Colors.grey[700],
       appBar: AppBar(
@@ -89,7 +93,7 @@ class _MoneyState extends State<Money> {
                   ),
                 ),
               ),
-              SizedBox(width: 14,),
+              SizedBox(height: 14,),
               TextField(
                 controller: data1_controller,
                 textInputAction: TextInputAction.next,
@@ -102,7 +106,7 @@ class _MoneyState extends State<Money> {
                   ),
                 ),
               ),
-              SizedBox(width: 14,),
+              SizedBox(height: 14,),
               TextField(
                 controller: data2_controller,
                 textInputAction: TextInputAction.next,
@@ -115,7 +119,7 @@ class _MoneyState extends State<Money> {
                   ),
                 ),
               ),
-              SizedBox(width: 14,),
+              SizedBox(height: 14,),
               TextField(
                 controller: change_controller,
                 textInputAction: TextInputAction.next,
@@ -128,7 +132,11 @@ class _MoneyState extends State<Money> {
                   ),
                 ),
               ),
-              SizedBox(width: 14,),
+              SizedBox(height: 14,),
+              ElevatedButton(onPressed: () {
+                FirebaseFirestore.instance.collection(_name).add({'day' : data0_controller.text, 'month' : data1_controller.text, 'year' : data2_controller.text, 'change' : change_controller.text, 'type' : type_controller.text});
+                Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+              }, child: Text('Применить', style: TextStyle(fontSize: 30),))
             ],
             //mainAxisAlignment: MainAxisAlignment.spaceAround,
           )

@@ -35,7 +35,7 @@ class _AuthState extends State<Auth> {
     setState(() {
       prefs.setString('name', _login.text);
       // Navigator.pushReplacementNamed(context, '/');
-      Navigator.popAndPushNamed(context, '/');
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     });
   }
 

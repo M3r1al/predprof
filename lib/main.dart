@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:predprof/pages/graph.dart';
 import 'package:predprof/pages/home.dart';
 import 'package:predprof/pages/money.dart';
 import 'package:predprof/pages/auth.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
     routes: {
       '/': (context) => Home(),
       '/money': (context) => Money(),
+      '/graph': (context) => Graph(),
       '/auth': (context) => Auth(),
     },
   ));
