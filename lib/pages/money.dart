@@ -134,7 +134,9 @@ class _MoneyState extends State<Money> {
               ),
               SizedBox(height: 14,),
               ElevatedButton(onPressed: () {
-                FirebaseFirestore.instance.collection(_name).add({'day' : data0_controller.text, 'month' : data1_controller.text, 'year' : data2_controller.text, 'change' : change_controller.text, 'type' : type_controller.text});
+                int dday = clamp(int.parse(data0_controller.text)), mmonth = clamp(int.parse(data1_controller.text)), yyear = clamp(int.parse(data2_controller.text));
+                int ttime = dday + mmonth + yyear;
+                FirebaseFirestore.instance.collection(_name).add({'time': ttime, 'day' : dday, 'month' : mmonth, 'year' : yyear, 'change' : int.parse(change_controller.text), 'type' : type_controller.text});
                 Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
               }, child: Text('Применить', style: TextStyle(fontSize: 30),))
             ],
@@ -144,6 +146,13 @@ class _MoneyState extends State<Money> {
 
     );
   }
+}
+
+clamp(int n) {
+  if(n > 1)
+    return n;
+  else
+    return 1;
 }
 
 /* old column

@@ -34,6 +34,28 @@ double lin_reg(List xs, List ys, double x) {
   return r * Dy * (x - xx) / Dx - yy;
 }
 
+MoneyPoint lin_reg_m(List<MoneyPoint> p, int m) {
+  double xx = 0, yy = 0, xy = 0;
+  for(int i = 0; i < p.length; i++) {
+    xx += p[i].time;
+    yy += p[i].value;
+    xy += p[i].value * p[i].time;
+  }
+  xx /= p.length;
+  yy /= p.length;
+  double Dx = 0, Dy = 0;
+  for(int i = 0; i < p.length; i++) {
+    Dx += (p[i].time - xx)*(p[i].time - xx);
+    Dy += (p[i].value - xx)*(p[i].value - xx);
+  }
+  Dx /= p.length;
+  Dy /= p.length;
+  Dx = sqrt(Dx);
+  Dy = sqrt(Dy);
+  double r = (xy - p.length * xx * yy) / (p.length * Dx * Dy);
+  return MoneyPoint((r * Dy * (lastDay(m) - xx) / Dx - yy).round(), lastDay(m));
+}
+
 int lastDay(int num){
   switch(num){
     case(1):
@@ -65,44 +87,51 @@ int lastDay(int num){
 }
 
 class _GraphState extends State<Graph> {
-
   void initList(String _col) async {
     // downM = [];
     // upM = [];
-    QuerySnapshot query = await FirebaseFirestore.instance.collection(_col).get();
+    QuerySnapshot query = await FirebaseFirestore.instance.collection(_col).orderBy('time').limit(100).get();
     if(query.docs.length <= 1)
       drw = false;
     else {
-      int m = int.parse(query.docs[query.docs.length - 1].get('month'));
+      int m = query.docs[query.docs.length - 1].get('month') as int;
       for (int i = query.docs.length - 1; i >= 1; i--) {
-        if (int.parse(query.docs[i].get('month')) != m)
+        if (query.docs[i].get('month') as int != m)
           break;
-        if(int.parse(query.docs[i].get('change')) >= 0) {
+        if(query.docs[i].get('change') as int >= 0) {
           bool _add = true;
           for (int j = 0; j < upM.length; j++) {
-            if (upM[j].time == int.parse(query.docs[i].get('day'))) {
+            if (upM[j].time == query.docs[i].get('day') as int) {
               _add = false;
-              upM[j].value += int.parse(query.docs[i].get('change'));
+              upM[j].value += query.docs[i].get('change') as int;
             }
           }
           if(_add)
-            upM.add(MoneyPoint(int.parse(query.docs[i].get('change')), int.parse(query.docs[i].get('day'))));
+            upM.add(MoneyPoint(query.docs[i].get('change') as int, query.docs[i].get('day') as int));
         }
         else {
           bool _add = true;
           for (int j = 0; j < downM.length; j++) {
-            if (downM[j].time == int.parse(query.docs[i].get('day'))) {
+            if (downM[j].time == query.docs[i].get('day') as int) {
               _add = false;
-              downM[j].value -= int.parse(query.docs[i].get('change'));
+              downM[j].value -= query.docs[i].get('change') as int;
             }
           }
           if(_add)
-            downM.add(MoneyPoint(int.parse(query.docs[i].get('change')), int.parse(query.docs[i].get('day'))));
+            downM.add(MoneyPoint(query.docs[i].get('change') as int, query.docs[i].get('day') as int));
         }
       }
+      if(downM.length < lastDay(m) && downM.length > 0)
+        downM.insert(0, lin_reg_m(downM, m));
+      else if(downM.length == 1)
+        downM.insert(0, MoneyPoint(downM[0].value, lastDay(m)));
+      if(upM.length < lastDay(m) && upM.length > 0)
+        upM.insert(0, lin_reg_m(upM, m));
+      else if(upM.length == 1)
+        upM.insert(0, MoneyPoint(upM[0].value, lastDay(m)));
       setState(() {
-        downM = downM;
-        upM = upM;
+        downM = downM.reversed.toList();
+        upM = upM.reversed.toList();
       });
       drw = true;
     }
@@ -160,10 +189,16 @@ class _GraphState extends State<Graph> {
           body: SfCartesianChart(series: <ChartSeries>[
             LineSeries<MoneyPoint, int>(dataSource: downM,
               xValueMapper: (MoneyPoint mp, _) => mp.time,
-              yValueMapper: (MoneyPoint mp, _) => mp.value),
+              yValueMapper: (MoneyPoint mp, _) => mp.value,
+              color: Colors.redAccent,
+              name: 'Расходы'
+            ),
             LineSeries<MoneyPoint, int>(dataSource: upM,
               xValueMapper: (MoneyPoint mp, _) => mp.time,
-              yValueMapper: (MoneyPoint mp, _) => mp.value)
+              yValueMapper: (MoneyPoint mp, _) => mp.value,
+              color: Colors.blueAccent,
+              name: 'Доходы'
+            )
           ],),
           ),
       );

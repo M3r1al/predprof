@@ -88,10 +88,10 @@ class _AuthState extends State<Auth> {
               Row(
                 children: [
                   ElevatedButton(onPressed: () async {
-                    QuerySnapshot query = await FirebaseFirestore.instance.collection(_login.text).get();
+                    QuerySnapshot query = await FirebaseFirestore.instance.collection(_login.text).orderBy('time', descending: false).get();
                     // var goOn = false;
                     if(query.docs.length > 0) {
-                      var _pass = query.docs[0];
+                      String _pass = query.docs[0].get('name');
                       if(_pass == _password.text)
                       {
                         setName();
@@ -109,7 +109,7 @@ class _AuthState extends State<Auth> {
                     if(query.docs.length <= 0) {
                       setName();
                       FirebaseFirestore.instance.collection(_login.text).add(
-                          {'name': _password.text});
+                          {'name': _password.text, 'time': -1});
                     }
                   }, child: Text(
                     'Регистрация',
