@@ -16,6 +16,7 @@ class _HomeState extends State<Home> {
 
   String _name = "Guest";
 
+  //get name from sharedpreferences and go to auth page if no one found
   void loadName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -25,6 +26,7 @@ class _HomeState extends State<Home> {
     });
   }
 
+  //log out func
   void logOut() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('name');
@@ -42,6 +44,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         backgroundColor: Colors.deepOrangeAccent,
       ),
+      //menu
       body: Row(
         children: [
           Column(
@@ -56,7 +59,7 @@ class _HomeState extends State<Home> {
                 Navigator.pushNamed(context, '/chart', arguments: _name);
               }, child: Text('Просмотреть диаграмму\nрасходов', textScaleFactor: pow, textAlign: TextAlign.center,),),
               ElevatedButton(onPressed: () {
-                export();
+                export(_name);
               }, child: Text('Экспорт данных в\nэксель файл', textScaleFactor: pow, textAlign: TextAlign.center,),),
               ElevatedButton(onPressed: () {
                 logOut();

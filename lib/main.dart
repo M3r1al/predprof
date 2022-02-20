@@ -7,6 +7,7 @@ import 'package:predprof/pages/money.dart';
 import 'package:predprof/pages/auth.dart';
 
 Future<void> main() async {
+  //initialize firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: FirebaseOptions(

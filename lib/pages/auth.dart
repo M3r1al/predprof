@@ -12,6 +12,7 @@ class _AuthState extends State<Auth> {
     super.initState();
   }
 
+  //set name to sharedpreferences and go to main page
   void setName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -36,6 +37,7 @@ class _AuthState extends State<Auth> {
           Column(
             children: [
               SizedBox(height: 40,),
+              //input login
               TextField(
                 controller: _login,
                 textInputAction: TextInputAction.next,
@@ -49,6 +51,7 @@ class _AuthState extends State<Auth> {
                 ),
               ),
               SizedBox(height: 4,),
+              //input password
               TextField(
                 controller: _password,
                 textInputAction: TextInputAction.done,
@@ -62,6 +65,7 @@ class _AuthState extends State<Auth> {
                 ),
               ),
               SizedBox(height: 14,),
+              //get send data from to firebase
               Row(
                 children: [
                   ElevatedButton(onPressed: () async {

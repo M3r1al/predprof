@@ -2,13 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+//chart code get from youtube syncfusion channel
 class Chart extends StatefulWidget{
   @override
   State<Chart> createState() => _ChartState();
 }
 
 class _ChartState extends State<Chart> {
-  void initList(String _col) async {
+  //init list func
+  void initList(String _col, String type) async {
     QuerySnapshot query = await FirebaseFirestore.instance.collection(_col).where('type', isEqualTo: type).limit(100).get();
     if(query.docs.length <= 1)
       drw = false;
@@ -29,9 +31,11 @@ class _ChartState extends State<Chart> {
 
   void initState() {
     super.initState();
+    typ = types[0];
   }
 
-  String type = 'cat';
+  final List<String> types = ['Транспорт', 'Аптеки', 'Дом', 'Одежда', 'Супермаркеты', 'Такси', 'Прочее'];
+  String typ = '';
   bool init = true, drw = false;
   String _name = '';
   List<MoneyCircle> money = [MoneyCircle('Доход', 0), MoneyCircle('Расход', 0)];
@@ -44,7 +48,7 @@ class _ChartState extends State<Chart> {
           .settings
           .arguments as String;
       _name = arguments;
-      initList(_name);
+      initList(_name, types[0]);
       init = false;
     }
 
@@ -91,11 +95,38 @@ class _ChartState extends State<Chart> {
               )
             ],
           ),
+          floatingActionButton:
+          DropdownButton<String>(
+            underline: Container(
+              height: 1.5,
+              color: Colors.grey[800],
+            ),
+            value: typ,
+            items: types.map(buildMenuItem).toList(),
+            onChanged: (value) {
+              setState(() {
+                typ = value!;
+                initList(_name, value);
+              });
+            },
+            dropdownColor: Colors.grey[700],
+          ),
         ),
       );
     }
   }
 }
+
+DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+  value: item,
+  child: Text(
+    item,
+    style: TextStyle(
+        fontSize: 30.0,
+        color: Colors.grey[900]
+    ),
+  ),
+);
 
 class MoneyCircle{
   MoneyCircle(this.name, this.value);

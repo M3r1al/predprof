@@ -36,6 +36,8 @@ dependencies:
   syncfusion_flutter_xlsio:
   path_provider:
   open_file:
+  universal_html:
+  permission_handler:
 
 
   # The following adds the Cupertino Icons font to your application.

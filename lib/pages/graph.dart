@@ -3,33 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+//chart code get from youtube syncfusion channel
 class Graph extends StatefulWidget{
   @override
   State<Graph> createState() => _GraphState();
 }
 
-double lin_reg(List xs, List ys, double x) {
-  double xx = 0, yy = 0, xy = 0;
-  for(int i = 0; i < xs.length; i++) {
-    xx += xs[i];
-    yy += ys[i];
-    xy += xs[i] * ys[i];
-  }
-  xx /= xs.length;
-  yy /= xs.length;
-  double Dx = 0, Dy = 0;
-  for(int i = 0; i < xs.length; i++) {
-    Dx += (xs[i] - xx)*(xs[i] - xx);
-    Dy += (xs[i] - xx)*(xs[i] - xx);
-  }
-  Dx /= xs.length;
-  Dy /= xs.length;
-  Dx = sqrt(Dx);
-  Dy = sqrt(Dy);
-  double r = (xy - xs.length * xx * yy) / (xs.length * Dx * Dy);
-  return r * Dy * (x - xx) / Dx - yy;
-}
-
+//linear regression func
 MoneyPoint lin_reg_m(List<MoneyPoint> p, int m) {
   double xx = 0, yy = 0, xy = 0;
   for(int i = 0; i < p.length; i++) {
@@ -52,6 +32,7 @@ MoneyPoint lin_reg_m(List<MoneyPoint> p, int m) {
   return MoneyPoint((r * Dy * (lastDay(m) - xx) / Dx - yy).round(), lastDay(m));
 }
 
+//days in current month
 int lastDay(int num){
   switch(num){
     case(1):
@@ -83,6 +64,7 @@ int lastDay(int num){
 }
 
 class _GraphState extends State<Graph> {
+  //init list func
   void initList(String _col) async {
     // downM = [];
     // upM = [];

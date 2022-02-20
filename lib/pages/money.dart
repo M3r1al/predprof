@@ -8,17 +8,14 @@ class Money extends StatefulWidget{
 
 class _MoneyState extends State<Money> {
 
+  //what we get and send to db
   String typeOfMoney = '';
-  int data0 = 0;
-  int data1 = 0;
-  int data2 = 0;
-  int moneyChange = 0;
-  final TextEditingController type_controller = TextEditingController();
   final TextEditingController data0_controller = TextEditingController();
   final TextEditingController data1_controller = TextEditingController();
   final TextEditingController data2_controller = TextEditingController();
   final TextEditingController change_controller = TextEditingController();
 
+  //create menu item from string
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
     value: item,
     child: Text(
@@ -32,19 +29,20 @@ class _MoneyState extends State<Money> {
 
   void initState(){
     super.initState();
+    typ = items[0];
   }
 
-  double pow = 1.8;
-
   List balance = [];
+  String typ = '';
 
+  //available types
   List<String> items = ['Транспорт', 'Аптеки', 'Дом', 'Одежда', 'Супермаркеты', 'Такси', 'Прочее'];
 
   @override
   Widget build(BuildContext context){
+    //get name
     final arguments = ModalRoute.of(context)!.settings.arguments as String;
     String _name = arguments;
-    String typ = items[0];
 
     return Scaffold(
       backgroundColor: Colors.grey[700],
@@ -57,7 +55,9 @@ class _MoneyState extends State<Money> {
         child:
           Column(
             children: [
+              //all sized box for space
               SizedBox(height: 40,),
+              //title
               Text(
                   'Добавление расхода/дохода',
                   style: TextStyle(
@@ -68,6 +68,7 @@ class _MoneyState extends State<Money> {
                   ),
               ),
               SizedBox(height: 14,),
+              //drop down list
               DropdownButton<String>(
                 underline: Container(
                   height: 1.5,
@@ -79,6 +80,7 @@ class _MoneyState extends State<Money> {
                 dropdownColor: Colors.grey[700],
               ),
               SizedBox(height: 14,),
+              //input day
               TextField(
                 controller: data0_controller,
                 textInputAction: TextInputAction.next,
@@ -92,6 +94,7 @@ class _MoneyState extends State<Money> {
                 ),
               ),
               SizedBox(height: 14,),
+              //input month
               TextField(
                 controller: data1_controller,
                 textInputAction: TextInputAction.next,
@@ -105,6 +108,7 @@ class _MoneyState extends State<Money> {
                 ),
               ),
               SizedBox(height: 14,),
+              //input year
               TextField(
                 controller: data2_controller,
                 textInputAction: TextInputAction.next,
@@ -118,6 +122,7 @@ class _MoneyState extends State<Money> {
                 ),
               ),
               SizedBox(height: 14,),
+              //input change
               TextField(
                 controller: change_controller,
                 textInputAction: TextInputAction.next,
@@ -132,9 +137,10 @@ class _MoneyState extends State<Money> {
               ),
               SizedBox(height: 14,),
               ElevatedButton(onPressed: () {
+                //send data to firebase
                 int dday = clamp(int.parse(data0_controller.text)), mmonth = clamp(int.parse(data1_controller.text)), yyear = clamp(int.parse(data2_controller.text));
                 int ttime = dday + mmonth + yyear;
-                FirebaseFirestore.instance.collection(_name).add({'time': ttime, 'day' : dday, 'month' : mmonth, 'year' : yyear, 'change' : int.parse(change_controller.text), 'type' : type_controller.text});
+                FirebaseFirestore.instance.collection(_name).add({'time': ttime, 'day' : dday, 'month' : mmonth, 'year' : yyear, 'change' : int.parse(change_controller.text), 'type' : typ});
                 Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
               }, child: Text('Применить', style: TextStyle(fontSize: 30),))
             ],
