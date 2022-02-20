@@ -33,6 +33,9 @@ dependencies:
     sdk: flutter
   shared_preferences:
   syncfusion_flutter_charts:
+  syncfusion_flutter_xlsio:
+  path_provider:
+  open_file:
 
 
   # The following adds the Cupertino Icons font to your application.

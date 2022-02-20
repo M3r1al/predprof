@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:predprof/pages/chart.dart';
 import 'package:predprof/pages/graph.dart';
 import 'package:predprof/pages/home.dart';
 import 'package:predprof/pages/money.dart';
@@ -24,6 +25,7 @@ Future<void> main() async {
       '/': (context) => Home(),
       '/money': (context) => Money(),
       '/graph': (context) => Graph(),
+      '/chart': (context) => Chart(),
       '/auth': (context) => Auth(),
     },
   ));

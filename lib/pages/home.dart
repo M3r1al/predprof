@@ -1,27 +1,17 @@
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:predprof/pages/export.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget{
-  //const Home({Key key}) : super(key : key);
-
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
 
-  // void initFirebase() async{
-  //   WidgetsFlutterBinding.ensureInitialized();
-  //   await Firebase.initializeApp();
-  // }
-
   void initState(){
     super.initState();
-    //loadName();
-
-    // initFirebase();
+    loadName();
   }
 
   String _name = "Guest";
@@ -29,10 +19,16 @@ class _HomeState extends State<Home> {
   void loadName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _name = (prefs.getString('name') ?? 0).toString();
+      _name = (prefs.getString('name') ?? '0').toString();
       if(_name == '0')
         Navigator.pushReplacementNamed(context, '/auth');
     });
+  }
+
+  void logOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('name');
+    Navigator.pushReplacementNamed(context, '/auth');
   }
 
   double pow = 1.8;
@@ -57,13 +53,13 @@ class _HomeState extends State<Home> {
                 Navigator.pushNamed(context, '/graph', arguments: _name);
               }, child: Text('Просмотреть график\nс прогнозом', textScaleFactor: pow, textAlign: TextAlign.center,),),
               ElevatedButton(onPressed: () {
-                Navigator.pushNamed(context, '/auth', arguments: _name);
+                Navigator.pushNamed(context, '/chart', arguments: _name);
               }, child: Text('Просмотреть диаграмму\nрасходов', textScaleFactor: pow, textAlign: TextAlign.center,),),
               ElevatedButton(onPressed: () {
-                //export
+                export();
               }, child: Text('Экспорт данных в\nэксель файл', textScaleFactor: pow, textAlign: TextAlign.center,),),
               ElevatedButton(onPressed: () {
-                //logout
+                logOut();
               }, child: Text('Выйти из аккаунта', textScaleFactor: pow, textAlign: TextAlign.center,),)
             ],
             mainAxisAlignment: MainAxisAlignment.spaceAround,

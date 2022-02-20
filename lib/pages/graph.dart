@@ -1,13 +1,9 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Graph extends StatefulWidget{
-  //const Home({Key key}) : super(key : key);
-
   @override
   State<Graph> createState() => _GraphState();
 }
@@ -186,17 +182,24 @@ class _GraphState extends State<Graph> {
             centerTitle: true,
             backgroundColor: Colors.deepOrangeAccent,
           ),
-          body: SfCartesianChart(series: <ChartSeries>[
+          body: SfCartesianChart(
+            legend: Legend(
+              isVisible: true,
+              overflowMode: LegendItemOverflowMode.wrap
+            ),
+            series: <ChartSeries>[
             LineSeries<MoneyPoint, int>(dataSource: downM,
               xValueMapper: (MoneyPoint mp, _) => mp.time,
               yValueMapper: (MoneyPoint mp, _) => mp.value,
               color: Colors.redAccent,
+              dataLabelSettings: DataLabelSettings(isVisible: true),
               name: 'Расходы'
             ),
             LineSeries<MoneyPoint, int>(dataSource: upM,
               xValueMapper: (MoneyPoint mp, _) => mp.time,
               yValueMapper: (MoneyPoint mp, _) => mp.value,
               color: Colors.blueAccent,
+              dataLabelSettings: DataLabelSettings(isVisible: true),
               name: 'Доходы'
             )
           ],),

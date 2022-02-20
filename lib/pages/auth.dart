@@ -1,41 +1,22 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth extends StatefulWidget{
-  // const Home({Key key}) : super(key : key);
-
   @override
   State<Auth> createState() => _AuthState();
 }
 
 class _AuthState extends State<Auth> {
-
-  // void initFirebase() async{
-  //   WidgetsFlutterBinding.ensureInitialized();
-  //   await Firebase.initializeApp(
-  //       options: FirebaseOptions(
-  //           apiKey: "AIzaSyDdxrL4eZ4CcyJzH1ayPGFdXMY3LYCRq84",
-  //           appId: "1:1035250211649:android:01298023ad703a6c3f1fc0",
-  //           messagingSenderId: "1035250211649",
-  //           projectId: "predprof-68d0e",
-  //       ),
-  //   );
-  // }
-
   void initState() {
     super.initState();
-
-    // initFirebase();
   }
 
   void setName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       prefs.setString('name', _login.text);
-      // Navigator.pushReplacementNamed(context, '/');
-      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+      Navigator.pushReplacementNamed(context, '/');
     });
   }
 
@@ -62,10 +43,8 @@ class _AuthState extends State<Auth> {
                   fontSize: 30.0
                 ),
                 decoration: InputDecoration(
-                  // labelText: 'Логин',
                   label: Text(
                     'Логин',
-                    //textScaleFactor: 1.8,
                   ),
                 ),
               ),
@@ -77,10 +56,8 @@ class _AuthState extends State<Auth> {
                     fontSize: 30.0
                 ),
                 decoration: InputDecoration(
-                  //labelText: 'Пароль',
                   label: Text(
                     'Пароль',
-                    //textScaleFactor: 1.8,
                   )
                 ),
               ),
@@ -89,7 +66,6 @@ class _AuthState extends State<Auth> {
                 children: [
                   ElevatedButton(onPressed: () async {
                     QuerySnapshot query = await FirebaseFirestore.instance.collection(_login.text).orderBy('time', descending: false).get();
-                    // var goOn = false;
                     if(query.docs.length > 0) {
                       String _pass = query.docs[0].get('name');
                       if(_pass == _password.text)
@@ -99,7 +75,6 @@ class _AuthState extends State<Auth> {
                     }
                   }, child: Text(
                     'Авторизация',
-                    //textScaleFactor: 1.8,
                     style: TextStyle(
                       fontSize: 25.0
                     ),
@@ -113,7 +88,6 @@ class _AuthState extends State<Auth> {
                     }
                   }, child: Text(
                     'Регистрация',
-                    //textScaleFactor: 1.8,
                     style: TextStyle(
                       fontSize: 25.0
                     ),
